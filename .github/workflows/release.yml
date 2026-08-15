@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [darwin, linux]
+        goarch: [amd64, arm64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+      - name: Build
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 0
+        run: |
+          mkdir -p dist
+          go build -o dist/air-${{ matrix.goos }}-${{ matrix.goarch }} .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: air-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: dist/air-${{ matrix.goos }}-${{ matrix.goarch }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+
+  homebrew:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      # Requires a HOMEBREW_BUMP_TOKEN repo secret: a GitHub PAT with
+      # public_repo + workflow scope, able to push to airanks-net/homebrew-tap.
+      - uses: dawidd6/action-homebrew-bump-formula@v4
+        with:
+          token: ${{ secrets.HOMEBREW_BUMP_TOKEN }}
+          tap: airanks-net/homebrew-tap
+          formula: air

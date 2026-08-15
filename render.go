@@ -233,7 +233,7 @@ type Domain struct {
 	AIFiles      AIFiles  `json:"ai_files"`
 }
 
-func render(d Domain, datasetVersion *int) string {
+func render(d Domain, datasetVersion *string) string {
 	var out []string
 	col := scoreRGB(d.AirScore)
 	pct := percentileLabel(d.Percentile)
@@ -322,8 +322,8 @@ func render(d Domain, datasetVersion *int) string {
 	}
 	pageURL := fmt.Sprintf("https://airanks.net/page?d=%s", d.Hostname)
 	dsNote := ""
-	if datasetVersion != nil {
-		dsNote = dim(fmt.Sprintf("  ·  %s dataset %d", FA["database"], *datasetVersion))
+	if datasetVersion != nil && *datasetVersion != "" {
+		dsNote = dim(fmt.Sprintf("  ·  %s %s", FA["database"], *datasetVersion))
 	}
 	out = append(out, fmt.Sprintf("  %s %s%s", dim(FA["link"]), dim(hyperlink(pageURL, fmt.Sprintf("airanks.net/page?d=%s", d.Hostname))), dsNote))
 	out = append(out, "")

@@ -46,13 +46,13 @@ func envIntOr(key string, def int) int {
 type apiEnvelope struct {
 	Data json.RawMessage `json:"data"`
 	Meta struct {
-		DatasetVersion *int `json:"dataset_version"`
+		DatasetVersion *string `json:"dataset_version"`
 	} `json:"meta"`
 }
 
 type fetchResult struct {
 	Data               json.RawMessage
-	DatasetVersion     *int
+	DatasetVersion     *string
 	RateLimitedSeconds int
 }
 

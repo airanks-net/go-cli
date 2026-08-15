@@ -1,0 +1,6 @@
+/air
+/go-cli
+*.exe
+*.test
+*.out
+/dist/

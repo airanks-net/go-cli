@@ -149,7 +149,7 @@ Every request carries a `User-Agent: air-go/1.0.0 (+https://airanks.net)` header
 | `air logout` | Delete the locally saved token (server-side token stays valid until it expires) |
 | `air whoami` | Show who you're logged in as, which tier, and token expiry if known |
 
-> 🧙 **First-run wizard:** the very first time you run `air` interactively with no saved credential, it offers the same login choice as `air login` — plus a "continue without signing in" option — so you're never hard-gated. It never fires for `--json`, piped input/output, or once *any* auth file (including an anonymous marker) exists.
+> 🧙 **First-run wizard:** the very first time you run `air` interactively with no saved credential, it offers the same login choice as `air login` — plus a "continue without signing in" option. Skipping doesn't avoid auth, it just defers it: a free account + token (`air login`) is required before any lookup succeeds. It never fires for `--json`, piped input/output, or once *any* auth file (including an anonymous marker) exists.
 
 ---
 
@@ -193,9 +193,11 @@ Every request carries a `User-Agent: air-go/1.0.0 (+https://airanks.net)` header
 
 ## 🔐 Shared authentication
 
+**A free account + token is required for every lookup.** Get one at **[airanks.net/tokens](https://airanks.net/tokens)**, then set it via the `AIR_API_KEY` env var (see [Environment variables](#-environment-variables)) or `air login`. Anonymous requests now get a `401` with a message pointing you at the signup URL — there's no working anonymous fallback anymore.
+
 **One login works across every AIR client.** `air login` here also logs in `air-cli` (Node), the Rust `air` client, and any tool using the `airanks-net/api-client` PHP package — they all read and write the **same** `~/.config/air/auth.json`, byte-for-byte identical shape, on purpose.
 
-Token resolution order (identical in every client, checked fresh on every request):
+Token resolution order (client-side precedence, checked fresh on every request):
 
 ```mermaid
 flowchart LR
@@ -203,11 +205,11 @@ flowchart LR
     E -- yes --> ENV["🔑 use env var\n(attaches to every request)"]
     E -- no --> F{"~/.config/air/\nauth.json exists\nwith a token?"}
     F -- yes --> FILE["📄 use saved token\n(attaches only if the\nrequest host == saved host)"]
-    F -- no --> ANON["👤 anonymous tier\n(no Authorization header)"]
+    F -- no --> ANON["🚫 anonymous tier\n(no Authorization header —\nserver now returns 401)"]
 ```
 
 ```
-AIR_API_KEY env  >  ~/.config/air/auth.json  >  anonymous
+AIR_API_KEY env  >  ~/.config/air/auth.json  >  anonymous (401 — no longer a usable fallback)
 ```
 
 Two ways to authenticate, both reachable from `air login` or the first-run wizard:

@@ -157,7 +157,8 @@ Force either with -d/--domain or -k/--keyword (alias -p/--phrase).
   --json   machine-readable output
   --txt    plain text — no color, no icons (same as TERM=dumb, CI=true)
 
-Logging in lifts the anonymous rate limit; AIR_API_KEY env overrides any
-saved login. Exit 2: domain is still being gathered, re-run in a bit.
+A free account + token is required for every lookup — get one at
+https://airanks.net/tokens, then "air login" or AIR_API_KEY env (which
+overrides any saved login). Exit 2: domain is still being gathered, re-run in a bit.
 Exit 1: hard failure, including a rate-limit that outlasted the deadline.`))
 }

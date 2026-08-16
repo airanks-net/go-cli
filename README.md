@@ -56,11 +56,20 @@
 
 ## 📥 Install
 
+🍺 **Homebrew** (macOS & Linux):
+
+```bash
+brew install airanks-net/tap/air
+```
+
+🐹 **Go toolchain** (drops `air` in `$(go env GOPATH)/bin`; requires **Go 1.22+**):
+
 ```bash
 go install github.com/airanks-net/go-cli@latest
 ```
 
-That drops an `air` binary in `$(go env GOPATH)/bin` — make sure it's on your `PATH`. Requires **Go 1.22+**.
+📦 **Prebuilt static binaries** — grab `air-<os>-<arch>` for darwin/linux × amd64/arm64 from the
+[latest release](https://github.com/airanks-net/go-cli/releases/latest), `chmod +x`, done.
 
 <details>
 <summary>🛠️ Building from a clone instead</summary>

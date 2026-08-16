@@ -1,6 +1,9 @@
-/air
-/go-cli
 *.exe
-*.test
 *.out
+*.test
+/air
 /dist/
+/go-cli
+air
+dist/
+go-cli

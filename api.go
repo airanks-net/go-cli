@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-const cliVersion = "1.0.1"
+const cliVersion = "1.0.2"
 
 // RFC 9110 product-token + contact-URL convention — a UA-less request 403s server-side.
 const userAgent = "air-go/" + cliVersion + " (+https://airanks.net)"

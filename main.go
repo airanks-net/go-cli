@@ -30,6 +30,11 @@ func main() {
 			break
 		}
 	}
+	if argsHave(args, "--version") || argsHave(args, "-v") {
+		fmt.Println("air " + cliVersion)
+		return
+	}
+
 	switch cmd {
 	case "login":
 		cmdLogin()

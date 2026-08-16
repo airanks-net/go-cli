@@ -44,14 +44,3 @@ jobs:
         with:
           files: dist/*
 
-  homebrew:
-    needs: release
-    runs-on: ubuntu-latest
-    steps:
-      # Requires a HOMEBREW_BUMP_TOKEN repo secret: a GitHub PAT with
-      # public_repo + workflow scope, able to push to airanks-net/homebrew-tap.
-      - uses: dawidd6/action-homebrew-bump-formula@v4
-        with:
-          token: ${{ secrets.HOMEBREW_BUMP_TOKEN }}
-          tap: airanks-net/homebrew-tap
-          formula: air
